@@ -1,0 +1,594 @@
+{
+  "info": {
+    "_postman_id": "product-catalog-api-collection",
+    "name": "Product Catalog API",
+    "description": "Complete API collection for testing Product Catalog API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"john_doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\",\n    \"role\": \"admin\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/register",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('JWT_TOKEN', response.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/login",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Electronics\",\n    \"description\": \"Electronic devices and gadgets\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/categories",
+              "host": ["{{BASE_URL}}"],
+              "path": ["categories"]
+            }
+          }
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/categories",
+              "host": ["{{BASE_URL}}"],
+              "path": ["categories"]
+            }
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/categories/{{CATEGORY_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["categories", "{{CATEGORY_ID}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Advanced Electronics\",\n    \"description\": \"High-tech electronic devices and gadgets\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/categories/{{CATEGORY_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["categories", "{{CATEGORY_ID}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/categories/{{CATEGORY_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["categories", "{{CATEGORY_ID}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"iPhone 15\",\n    \"description\": \"Latest iPhone with advanced features\",\n    \"category\": \"Electronics\",\n    \"price\": 999.99,\n    \"stock\": 50,\n    \"image\": \"https://example.com/iphone15.jpg\",\n    \"variants\": [\n        {\n            \"size\": \"128GB\",\n            \"color\": \"Black\",\n            \"quantity\": 20\n        },\n        {\n            \"size\": \"256GB\",\n            \"color\": \"Blue\",\n            \"quantity\": 30\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/products",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Create Product with Discount",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"MacBook Pro\",\n    \"description\": \"High-performance laptop\",\n    \"category\": \"Electronics\",\n    \"price\": 1999.99,\n    \"discountPercentage\": 15,\n    \"stock\": 25,\n    \"variants\": [\n        {\n            \"size\": \"13-inch\",\n            \"color\": \"Space Gray\",\n            \"quantity\": 15\n        },\n        {\n            \"size\": \"16-inch\",\n            \"color\": \"Silver\",\n            \"quantity\": 10\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/products",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/products/{{PRODUCT_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", "{{PRODUCT_ID}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"price\": 899.99,\n    \"discountPercentage\": 20,\n    \"description\": \"Updated description with new features\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/products/{{PRODUCT_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", "{{PRODUCT_ID}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/products/{{PRODUCT_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", "{{PRODUCT_ID}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search & Filtering",
+      "item": [
+        {
+          "name": "Search by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products?search=iPhone",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "iPhone"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products?categories=Electronics",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "categories",
+                  "value": "Electronics"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Price Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products?minPrice=500&maxPrice=1500",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "minPrice",
+                  "value": "500"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "1500"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter Products on Sale",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products?onSale=true",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "onSale",
+                  "value": "true"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Color",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products?color=Black",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "color",
+                  "value": "Black"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Size",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products?size=128GB",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "128GB"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Low Stock Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/products/reports/low-stock?threshold=30",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", "reports", "low-stock"],
+              "query": [
+                {
+                  "key": "threshold",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Products on Sale Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/products/reports/on-sale",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", "reports", "on-sale"]
+            }
+          }
+        },
+        {
+          "name": "Inventory Summary Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/products/reports/inventory",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products", "reports", "inventory"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/users",
+              "host": ["{{BASE_URL}}"],
+              "path": ["users"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error Testing",
+      "item": [
+        {
+          "name": "Invalid Registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"ab\",\n    \"email\": \"invalid-email\",\n    \"password\": \"123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/register",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Invalid Product Creation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"\",\n    \"price\": -10\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/products",
+              "host": ["{{BASE_URL}}"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Unauthorized Access",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/users",
+              "host": ["{{BASE_URL}}"],
+              "path": ["users"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "JWT_TOKEN",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "CATEGORY_ID",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "PRODUCT_ID",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
