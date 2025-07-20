@@ -24,7 +24,7 @@ Installation
 
 1. 
 Clone this repository:
-shDownloadCopy code Wrapgit clone https://github.com/ayadeleke/ProductCatalogAPI.git
+shDownloadCopy code Wrapgit clone https://github.com/lasgedu/ProductCatalogAPI.git
 cd ProductCatalogAPI
 
 2. 
